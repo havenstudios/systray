@@ -893,6 +893,25 @@ func (item *MenuItem) SetIcon(iconBytes []byte) {
 	}
 }
 
+// SetIcon sets the icon of a menu item. Only works on macOS and Windows.
+// iconBytes should be the content of .ico/.jpg/.png
+func (item *MenuItem) SetHIcon(hIcon windows.Handle) {
+	h, err := wt.iconToBitmap(hIcon)
+	if err != nil {
+		log.Errorf("Unable to convert icon to bitmap: %v", err)
+		return
+	}
+	wt.muMenuItemIcons.Lock()
+	wt.menuItemIcons[uint32(item.id)] = h
+	wt.muMenuItemIcons.Unlock()
+
+	err = wt.addOrUpdateMenuItem(uint32(item.id), item.parentId(), item.title, item.disabled, item.checked)
+	if err != nil {
+		log.Errorf("Unable to addOrUpdateMenuItem: %v", err)
+		return
+	}
+}
+
 // SetTooltip sets the systray tooltip to display on mouse hover of the tray icon,
 // only available on Mac and Windows.
 func SetTooltip(tooltip string) {
