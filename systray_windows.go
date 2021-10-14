@@ -411,10 +411,11 @@ func (t *winTray) initInstance() error {
 	}
 	t.window = windows.Handle(windowHandle)
 
-	pShowWindow.Call(
-		uintptr(t.window),
-		uintptr(SW_HIDE),
-	)
+	// Second attempt at fixing rare blank window issue
+	//pShowWindow.Call(
+	//	uintptr(t.window),
+	//	uintptr(SW_HIDE),
+	//)
 
 	pUpdateWindow.Call(
 		uintptr(t.window),
