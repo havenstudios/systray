@@ -643,8 +643,7 @@ func (t *winTray) showMenu() error {
 	if res == 0 {
 		return err
 	}
-	// trying to fix rare blank window bug when clicking tray app
-	// pSetForegroundWindow.Call(uintptr(t.window))
+	pSetForegroundWindow.Call(uintptr(t.window))
 
 	res, _, err = pTrackPopupMenu.Call(
 		uintptr(t.menus[0]),
